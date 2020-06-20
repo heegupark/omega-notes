@@ -3,44 +3,26 @@ require('./db/mongoose')
 const userRouter = require('./routers/user')
 const taskRouter = require('./routers/task')
 
+const https = require('https')
+const fs = require('fs')
+
 const app = express()
 const port = process.env.PORT
-
-// const multer = require('multer')
-// const upload = multer({
-//   dest: 'images',
-//   limits: {
-//     fileSize: 1000000
-//   },
-//   fileFilter(req, file, cb) {
-//     // if (!file.originalname.endsWith('.pdf')) {
-//     if (!file.originalname.match(/\.(doc|docx)$/)) {
-//       return cb(new Error('Please upload a Word ducoment'))
-//     }
-
-//     cb(undefined, true)
-//     // cb(new Error('File must be a PDF'))
-//     // cb(undefined, true)
-//     // cb(undefined, false)
-//   }
-// })
-
-// app.post('/upload', upload.single('upload'), upload.single('upload'), (req, res) => {
-//   res.send()
-// }, (error, req, res, next) => {
-//   res.status(400).send( {error: error.message} )
-// })
 
 app.use(express.json())
 app.use(userRouter)
 app.use(taskRouter)
 
-//
-// without middleware: new request        ->        run route handler
-//
-// with middleware:    new request        ->        do something        ->      run route handler
-//
-
-app.listen(port, () => {
-  console.log('Server is up on port ' + port)
-})
+if (process.env.ENV === 'DEV') {
+  app.listen(process.env.PORT, () => {
+    console.log('[http] Server listening on port', process.env.PORT)
+  })
+} else if (process.env.ENV === 'LIVE') {
+  https.createServer({
+    key: fs.readFileSync('/etc/letsencrypt/live/city.heegu.net/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/city.heegu.net/fullchain.pem')
+  },
+    app).listen(process.env.PORT, () => {
+      console.log(`[https] Server listening on port ${process.env.PORT}`)
+    });
+}
