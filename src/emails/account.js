@@ -7,7 +7,7 @@ const sendWelcomeEmail = (email, name) => {
     to: email,
     from: 'omegathrone@omegathrone.com',
     subject: 'Thanks for joining in!',
-    text: 'Welcome to the app, ${name}. Let me know how you get along with the app.'
+    text: `Welcome to the omega notes, ${name}. \n\n It is really great to have you here. Let me know how you get along with the app. \n\n Best regards, \n\n heegu.net`
   })
 }
 
@@ -16,7 +16,7 @@ const sendCancelationEmail = (email, name) => {
     to: email,
     from: 'omegathrone@omegathrone.com',
     subject: 'Sorry to see you go!',
-    text: 'Goodbye, ${name}. I hope to see you back sometime soon.'
+    text: `Goodbye, ${name}. I hope to see you back sometime soon.`
   })
 }
 
