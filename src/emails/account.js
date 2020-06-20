@@ -7,7 +7,7 @@ const sendWelcomeEmail = (email, name) => {
     to: email,
     from: 'omegathrone@omegathrone.com',
     subject: 'Thanks for joining in omega notes!',
-    text: `Welcome to the omega notes, ${name}. \n\n It is really great to have you here. Let me know how you get along with the app. \nFrom now on, you can enjoy omega notes for good!!! \n\n Best regards, \n https://www.heegu.net`
+    text: `Welcome to the omega notes, ${name}. \n\n It is really great to have you here. Let me know how you get along with the app. \nFrom now on, you can enjoy omega notes for good!!! \n\n Best regards, \n www.heegu.net`
   })
 }
 

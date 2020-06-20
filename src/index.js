@@ -1,7 +1,7 @@
 const express = require('express')
 require('./db/mongoose')
 const userRouter = require('./routers/user')
-const taskRouter = require('./routers/task')
+const noteRouter = require('./routers/note')
 
 const https = require('https')
 const fs = require('fs')
@@ -11,7 +11,7 @@ const port = process.env.PORT
 
 app.use(express.json())
 app.use(userRouter)
-app.use(taskRouter)
+app.use(noteRouter)
 
 if (process.env.ENV === 'DEV') {
   app.listen(process.env.PORT, () => {
