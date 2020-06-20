@@ -61,26 +61,10 @@ userSchema.virtual('tasks', {
   foreignField: 'owner'
 })
 
-// userSchema.methods.getPublicProfile = function () {
-//   const user = this
-//   const userObject = user.toObject()
-
-//   delete userObject.age
-//   delete userObject.name
-//   delete userObject.email
-//   delete userObject.password
-//   delete userObject.tokens
-
-//   return userObject
-// }
-
 userSchema.methods.toJSON = function () {
   const user = this
   const userObject = user.toObject()
 
-  // delete userObject.age
-  // delete userObject.name
-  // delete userObject.email
   delete userObject.password
   delete userObject.tokens
   delete userObject.avatar
