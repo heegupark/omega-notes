@@ -7,9 +7,10 @@ const noteSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
-  completed: {
-    type: Boolean,
-    default: false
+  imgUrl: {
+    type: String,
+    required: false,
+    trim: true
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

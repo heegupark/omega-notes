@@ -1,0 +1,203 @@
+body {
+  font-family: 'Baloo Bhaina 2', cursive;
+  font-size: 14px;
+}
+
+main {
+  min-height: 82vh;
+  margin: auto;
+  max-width: 800px;
+}
+
+.omega-logo {
+  width: 20px;
+}
+
+.omega-note {
+  cursor: pointer;
+}
+
+.time-msg {
+  font-size: 10px;
+}
+
+.signin-box {
+  position: absolute;
+  right: 25%;
+}
+
+.signin-btn {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.signin-btn:hover {
+  color: black;
+  transform: scale(1.1);
+}
+
+.input-box {
+  top: 50px;
+  max-width: 775px;
+  z-index: 1;
+  background-color: white;
+}
+
+.note-item-box {
+  margin-top: 120px;
+}
+
+.note-item-box-add {
+  margin-top: 150px;
+}
+
+.add-image {
+  width: 80px;
+  /* height: 50px; */
+}
+
+.add-image > img {
+  width: 100%;
+  height: 100%;
+}
+
+.edit-image {
+  width: 150px;
+  /* height: 50px; */
+}
+
+.sign-item-box {
+  margin-top: 75px;
+}
+
+.update-image {
+  width: 405px;
+}
+
+.btn-custom {
+  width: 150px;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.note-edit-custom {
+  width: 90%;
+  color: black;
+  background-color: white;
+  padding: 5px;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, 1);
+  margin: 15% auto;
+  border: 1px solid rgba(53, 230, 221);
+  width: 50%;
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.size-up-down-odd {
+  animation: sizeUpDownOdd 0.1s ease-in;
+}
+
+.size-up-down-even {
+  animation: sizeUpDownEven 0.1s ease-in;
+}
+
+@keyframes sizeUpDownOdd {
+  0%   {transform: scale(1); }
+  50%  {transform: scale(1.2);}
+  100% {transform: scale(1);}
+}
+
+@keyframes sizeUpDownEven {
+  0%   {transform: scale(1);}
+  50%  {transform: scale(1.2);}
+  100% {transform: scale(1);}
+}
+
+@media (max-width: 1199.98px) {
+  .signin-box {
+    right: 15%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .signin-box {
+    right: 13%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .signin-box {
+    right: 5%;
+  }
+
+  .modal-content {
+    width: 80%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .logo-img  {
+    width: 20px;
+    margin-top: 10px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    padding-bottom: 10px;
+  }
+
+  .signin-box {
+    right: 2%;
+  }
+
+  main {
+    min-height: 75vh;
+  }
+
+  .modal-content {
+    width: 90%;
+    margin: 45% auto;
+  }
+}
+
+@media (max-width: 260px) {
+  .logo-img  {
+    width: 20px;
+  }
+
+  .logo-text {
+    display: none
+  }
+}

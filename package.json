@@ -5,25 +5,47 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index",
+    "dev:client": "webpack-dev-server",
+    "dev:server": "env-cmd -f ./config/dev.env node src/index.js",
     "dev": "env-cmd -f ./config/dev.env node src/index.js",
-    "test": "jest"
+    "build": "webpack --mode=development --watch",
+    "devall": "npm-run-all --silent --parallel dev:*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "proxy": {
+    "/api": {
+      "target": "http://[::1]:4001/",
+      "secure": false
+    }
+  },
   "dependencies": {
-    "@sendgrid/mail": "^7.1.0",
+    "@sendgrid/mail": "^7.2.0",
     "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.5.5",
-    "mongoose": "^5.9.7",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.9.20",
     "multer": "^1.4.2",
-    "sharp": "^0.25.2",
-    "validator": "^13.0.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "sharp": "^0.25.4",
+    "validator": "^13.1.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/plugin-transform-react-jsx": "^7.10.3",
+    "babel-loader": "^8.1.0",
     "env-cmd": "^10.1.0",
-    "nodemon": "^2.0.3"
+    "husky": "^4.2.5",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   }
 }
