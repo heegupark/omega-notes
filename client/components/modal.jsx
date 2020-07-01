@@ -40,7 +40,7 @@ class Modal extends Component {
     if (file) {
       form.append('image', file, changedImageName);
       addImage(form)
-      updateNote(selectedNoteId, description, `/notes/${user._id}/thumbnail-${changedImageName}`)
+      updateNote(selectedNoteId, description, `notes/${user._id}/thumbnail-${changedImageName}`)
     } else {
       updateNote(selectedNoteId, description)
     }

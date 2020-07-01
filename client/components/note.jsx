@@ -42,7 +42,7 @@ class Note extends Component {
       const changedImageName = fileName.split(' ').join('');
       newNote = {
         "description": note,
-        "imgUrl": `/notes/${_id}/thumbnail-${changedImageName}`
+        "imgUrl": `notes/${_id}/thumbnail-${changedImageName}`
       }
       form.append('image', file, changedImageName);
     }
