@@ -193,7 +193,8 @@ main {
   }
 
   .modal-content {
-    width: 80%;
+    width: 60%;
+    margin: 10% auto;
   }
 }
 
@@ -212,6 +213,10 @@ main {
     left: 5%;
   }
 
+  .input-text {
+    font-size: 14px;
+  }
+
   .wide-animation{
     width: 250px;
   }
@@ -226,7 +231,7 @@ main {
 
   .modal-content {
     width: 90%;
-    margin: 45% auto;
+    margin: 25% auto;
   }
 }
 

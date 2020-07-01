@@ -5,7 +5,8 @@ class NoteItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
+      isImgLoaded: false
     }
     this.getTimeMsg = this.getTimeMsg.bind(this)
     this.handleUpdateClick = this.handleUpdateClick.bind(this)
@@ -100,7 +101,7 @@ class NoteItem extends Component {
       updatedAt,
       updateNote,
       keyword } = this.props
-    const { isModalOpen } = this.state
+    const { isModalOpen, isImgLoaded } = this.state
     const {
       getTimeMsg,
       handleUpdateClick,
@@ -112,14 +113,25 @@ class NoteItem extends Component {
       <div id={_id}>
         <hr></hr>
         <div className="row my-1">
-          <div className="add-image ml-4">
+          <div className="add-image ml-4 text-center">
           {imgUrl
-            ? (
-                <img
-                  alt=""
-                  className="img-fluid img-thumbnail rounded cursor"
-                  src={imgUrl}
-                  onClick={handleImageClick}></img>
+              ? (
+                <>
+                  <img
+                    alt=""
+                    className="img-fluid img-thumbnail rounded cursor"
+                    src={imgUrl}
+                    onLoad={() => this.setState({ isImgLoaded: true })}
+                    style={isImgLoaded ? {} : { display: 'none' }}
+                    onClick={handleImageClick}></img>
+                    <div
+                      className="spinner-border spinner-border-sm text-info"
+                      role="status"
+                      style={isImgLoaded ? { display: 'none' } : {} }
+                      >
+                      <span className="sr-only"></span>
+                    </div>
+                  </>
               )
               : (
                 // <img alt="" className="img-fluid img-thumbnail rounded"></img>
@@ -132,7 +144,7 @@ class NoteItem extends Component {
               <div className="col">
                 <div className="">{keyword ? textBolder(description, keyword) : description}</div>
               </div>
-              <div className="col">
+              <div className="col-1" style={{ display: isSignedIn ? 'block' : 'none'}}>
                 <div className="editing-box">
                   <div className="text-right">
                     {isSignedIn

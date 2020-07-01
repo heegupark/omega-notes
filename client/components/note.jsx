@@ -130,7 +130,7 @@ class Note extends Component {
     return (
       <main>
         <div className="row my-3 mx-auto fixed-top bg-white input-box">
-          <div className='col-sm mx-auto input-group'>
+          <div className="col-sm mx-auto input-group">
             <div className="input-group-prepend">
               {fileObject
                 ? (
@@ -144,7 +144,7 @@ class Note extends Component {
                   )
                 : (
                     <button
-                      className="btn btn-sm btn-outline-success cursor"
+                      className="btn btn-sm btn-outline-success input-text cursor"
                       onClick={handleUploadBtnClick}
                       onDragOver={e => e.preventDefault()}
                       onDrop={handleFileDropChange}>
@@ -162,7 +162,7 @@ class Note extends Component {
               autoFocus
               required
               rows="1"
-              className="form-control resize-none"
+              className="form-control resize-none input-text"
               type="text"
               value={note}
               onChange={handleNoteInputChange}
@@ -171,14 +171,14 @@ class Note extends Component {
               <button
                 disabled={isModalOpen}
                 type="button"
-                className="btn btn-sm btn-outline-info"
+                className="btn btn-sm btn-outline-info input-text"
                 onClick={handleAddClick}>Add</button>
               {fileObject || note
                 ? (
                     <button
                       disabled={isModalOpen}
                       type="button"
-                      className="btn btn-sm btn-outline-secondary"
+                      className="btn btn-sm btn-outline-secondary input-text"
                       onClick={handleCancelClick}>Cancel</button>
                 )
                 : ''
