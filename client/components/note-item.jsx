@@ -11,6 +11,7 @@ class NoteItem extends Component {
     this.handleUpdateClick = this.handleUpdateClick.bind(this)
     this.handleDeleteClick = this.handleDeleteClick.bind(this)
     this.handleImageClick = this.handleImageClick.bind(this)
+    this.textBolder = this.textBolder.bind(this)
   }
 
   getTimeMsg(updatedAt) {
@@ -71,14 +72,41 @@ class NoteItem extends Component {
     openModal('enlargeImage', _id, description, imgUrl)
   }
 
+  textBolder(text, boldStr) {
+    const keyword = new RegExp(boldStr, 'i');
+    const array = text.split(keyword);
+    const keyIndex = text.toLowerCase().indexOf(boldStr.toLowerCase());
+    const originalKeyword = text.substring(keyIndex, keyIndex + boldStr.length);
+    return (
+      <>
+        {array.map((item, index) => (
+          <span key={index}>
+            {item}
+            {index !== array.length - 1 && (
+              <b className="text-dark bg-warning">{originalKeyword}</b>
+            )}
+          </span>
+        ))}
+      </>
+    );
+  }
+
   render() {
-    const { _id, imgUrl, isSignedIn, description, updatedAt, updateNote } = this.props
+    const {
+      _id,
+      imgUrl,
+      isSignedIn,
+      description,
+      updatedAt,
+      updateNote,
+      keyword } = this.props
     const { isModalOpen } = this.state
     const {
       getTimeMsg,
       handleUpdateClick,
       handleDeleteClick,
-      handleImageClick } = this
+      handleImageClick,
+      textBolder } = this
     const timeMessage = getTimeMsg(updatedAt)
     return (
       <div id={_id}>
@@ -102,7 +130,7 @@ class NoteItem extends Component {
           <div className="col my-auto mr-3">
             <div className="row d-flex">
               <div className="col">
-                <div className="">{description}</div>
+                <div className="">{keyword ? textBolder(description, keyword) : description}</div>
               </div>
               <div className="col">
                 <div className="editing-box">

@@ -11,6 +11,7 @@ class App extends Component {
     super(props)
     this.state = {
       notes: [],
+      originalNotes: [],
       view: 'note',
       user: {},
       isSignedIn: false,
@@ -18,7 +19,9 @@ class App extends Component {
       modalCategory: '',
       selectedNoteId: null,
       description: '',
-      imgUrl: ''
+      imgUrl: '',
+      isFirstSearch: true,
+      keyword: ''
     };
     this.setPage = this.setPage.bind(this)
     this.getUserInfo = this.getUserInfo.bind(this)
@@ -32,6 +35,7 @@ class App extends Component {
     this.addNote = this.addNote.bind(this)
     this.addImage = this.addImage.bind(this)
     this.updateNote = this.updateNote.bind(this)
+    this.searchKeyword = this.searchKeyword.bind(this)
   }
 
   componentDidMount() {
@@ -230,6 +234,27 @@ class App extends Component {
     })
   }
 
+  searchKeyword(keyword) {
+    let arr = [];
+    const { isFirstSearch } = this.state;
+    if (isFirstSearch) {
+      arr = [...this.state.notes]
+      this.setState({
+        originalNotes: arr,
+        isFirstSearch: false
+      });
+    } else {
+      arr = [...this.state.originalNotes];
+    }
+    const newArr = arr.filter(note => {
+      return note.description.toLowerCase().includes(keyword.toLowerCase());
+    });
+    this.setState({
+      notes: newArr,
+      keyword
+    });
+  }
+
   render() {
     const {
       addNote,
@@ -240,7 +265,8 @@ class App extends Component {
       signout,
       setSignin,
       deleteNote,
-      updateNote } = this
+      updateNote,
+      searchKeyword } = this
     const {
       notes,
       view,
@@ -250,7 +276,8 @@ class App extends Component {
       modalCategory,
       selectedNoteId,
       description,
-      imgUrl } = this.state
+      imgUrl,
+      keyword } = this.state
     const username = user ? user.name : ''
     let element = null
 
@@ -264,7 +291,8 @@ class App extends Component {
             openModal={openModal}
             notes={notes}
             addNote={addNote}
-            addImage={addImage}/>
+            addImage={addImage}
+            keyword={keyword}/>
         )
         break;
       case 'signin':
@@ -292,7 +320,8 @@ class App extends Component {
           isSignedIn={isSignedIn}
           closeModal={closeModal}
           openModal={openModal}
-          isModalOpen={isModalOpen}  />
+          isModalOpen={isModalOpen}
+          searchKeyword={searchKeyword} />
         {element}
         {isModalOpen
           ? <Modal

@@ -17,6 +17,7 @@ class Note extends Component {
     this.handleFileInputChange = this.handleFileInputChange.bind(this)
     this.handleCancelClick = this.handleCancelClick.bind(this)
     this.handleFileDropChange = this.handleFileDropChange.bind(this)
+    this.uploader = React.createRef();
   }
 
   handleNoteInputChange() {
@@ -41,7 +42,7 @@ class Note extends Component {
       const changedImageName = fileName.split(' ').join('');
       newNote = {
         "description": note,
-        "imgUrl": `/notes/${_id}/${changedImageName}`
+        "imgUrl": `/notes/${_id}/thumbnail-${changedImageName}`
       }
       form.append('image', file, changedImageName);
     }
@@ -73,7 +74,8 @@ class Note extends Component {
   }
 
   handleUploadBtnClick() {
-    this.refs.uploader.click();
+    // this.refs.uploader.click();
+    this.uploader.current.click();
   }
 
   handleCancelClick() {
@@ -110,14 +112,20 @@ class Note extends Component {
     const {
         notes,
         isSignedIn,
-        addImage, openModal, closeModal, isModalOpen, updateNote } = this.props
+        addImage,
+        openModal,
+        closeModal,
+        isModalOpen,
+        updateNote,
+        keyword } = this.props
     const {
         handleNoteInputChange,
         handleAddClick,
         handleUploadBtnClick,
         handleFileInputChange,
         handleCancelClick,
-        handleFileDropChange } = this
+        handleFileDropChange,
+        uploader} = this
     const { note, fileObject } = this.state
     return (
       <main>
@@ -147,7 +155,7 @@ class Note extends Component {
               <input
                 hidden
                 type="file"
-                ref="uploader"
+                ref={uploader}
                 onChange={handleFileInputChange} />
             </div>
             <textarea
@@ -196,7 +204,8 @@ class Note extends Component {
                   addImage={addImage}
                   openModal={openModal}
                   closeModal={closeModal}
-                  updateNote={updateNote} />;
+                  updateNote={updateNote}
+                  keyword={keyword} />;
               })
               : (
                 <>

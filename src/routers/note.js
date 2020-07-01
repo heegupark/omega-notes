@@ -79,8 +79,19 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
       cb(undefined, true);
     }
   }).single('image');
-  upload(req, res, function (err) {
-    if (err) {
+  upload(req, res, (error) => {
+      try {
+        sharp(req.file.path)
+          .resize({ width: 250, height: 250 })
+          .png()
+          .toFile(`${folder}/thumbnail-${req.file.filename}`)
+        return res.status(201).json({
+          message: 'File resized successfully'
+        });
+      } catch (error) {
+        console.error(error);
+      }
+      if (error) {
       return res.status(400).json({
         error: 'Failed to upload an image'
       });
@@ -88,6 +99,7 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
       return res.status(200).json({status: 'success'});
     }
   });
+
 });
 
 router.patch('/api/notes/:id', auth, async (req, res) => {
