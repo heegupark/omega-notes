@@ -99,7 +99,7 @@ main {
 
 .search-input-box {
   position: absolute;
-  left: 10%;
+  left: 25%;
   top: 12px;
 }
 
@@ -183,6 +183,12 @@ main {
 @media (max-width: 991.98px) {
   .signin-box {
     right: 10%;
+  }
+
+  .search-input-box {
+    position: absolute;
+    left: 10%;
+    top: 12px;
   }
 }
 
