@@ -60,6 +60,7 @@ class Header extends Component {
       handleSearchCancelClick,
       handleSearchClick } = this
     const {
+      view,
       data,
       username,
       isSignedIn,
@@ -67,34 +68,34 @@ class Header extends Component {
     const { isSearch, search } = this.state
     return (
       <nav className="navbar bg-info fixed-top">
-        <div className="fixed-top input-group mb-3 search-input-box">
-        {isSearch
-          ?(
-            <>
-              <input
-                type="text"
-                placeholder="search notes"
-                className="pl-2 search-input wide-animation"
-                value={search}
-                onChange={handleSearchInputChange}
-              />
-              <div className="input-group-append">
-                <button
-                  className="btn btn-sm btn-secondary"
-                  onClick={handleSearchCancelClick}>
-                  X
-                </button>
-              </div>
-              </>
-          )
-          :(
+        <div className="input-group mb-3 search-input-box" style={{ display: view !== 'note' ? 'none' : ''}}>
+          {isSearch
+            ?(
+              <>
+                <input
+                  type="text"
+                  placeholder="search notes"
+                  className="pl-2 search-input wide-animation"
+                  value={search}
+                  onChange={handleSearchInputChange}
+                />
+                <div className="input-group-append">
+                  <button
+                    className="btn btn-sm btn-secondary"
+                    onClick={handleSearchCancelClick}>
+                    X
+                  </button>
+                </div>
+                </>
+            )
+            :(
               <div className="search-cion text-white text-center cursor" onClick={handleSearchClick}>
-              <i className="fas fa-search"></i>
-            </div>
-          )
-        }
+                <i className="fas fa-search"></i>
+              </div>
+            )
+          }
         </div>
-        <div className="row w-100 mx-auto">
+        <div className="mx-auto">
           <div className="col my-auto text-center">
             <a href="https://www.heegu.net" target="_blank">
               <img className="omega-logo mr-1 mb-1" src="images/o-logo.png"/>

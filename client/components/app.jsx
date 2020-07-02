@@ -315,6 +315,7 @@ class App extends Component {
     return (
       <div>
         <Header
+          view={view}
           setPage={setPage}
           username={username}
           isSignedIn={isSignedIn}

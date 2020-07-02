@@ -95,7 +95,6 @@ main {
 
 .search-input-box {
   position: absolute;
-  z-index: 1;
   left: 10%;
   top: 12px;
 }
