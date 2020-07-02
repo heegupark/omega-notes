@@ -89,21 +89,21 @@ class Header extends Component {
                 </>
             )
             :(
-              <div className="search-cion text-white text-center cursor" onClick={handleSearchClick}>
+              <div className="search-icon text-white text-center cursor" onClick={handleSearchClick}>
                 <i className="fas fa-search"></i>
               </div>
             )
           }
         </div>
         <div className="mx-auto">
-          <div className="col my-auto text-center">
-            <a href="https://www.heegu.net" target="_blank">
+          <div className="col my-auto text-center logo-box">
+            <a href="https://www.heegu.net" target="_blank" style={{ display: isSearch ? 'none' : '' }}>
               <img className="omega-logo mr-1 mb-1" src="images/o-logo.png"/>
             </a>
-            <a className="navbar-brand text-white mx-auto omega-note" onClick={handleLogoClick}>omega notes</a>
+            <a className="navbar-brand text-white mx-auto omega-note" onClick={handleLogoClick} style={{ display: isSearch ? 'none' : '' }}>omega notes</a>
           </div>
         </div>
-        <div className="signin-box">
+        <div className="signin-box" style={{ display: view !== 'note' ? 'none' : '' }}>
           <div className="text-center text-white mx-auto mt-1">
             <span>{username || ''}</span>
             {isSignedIn
@@ -113,7 +113,6 @@ class Header extends Component {
                 onClick={handleSignoutClick}>
                   <i className="fas fa-sign-out-alt"></i>
               </button>
-
               : <button
                 disabled={isModalOpen ? true : false}
                 className="mt-2 btn signin-btn text-white"

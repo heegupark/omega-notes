@@ -99,13 +99,11 @@ class Note extends Component {
 
   handleFileDropChange() {
     event.preventDefault()
-    if (event.target.files[0]) {
-      this.setState({
-        file: event.dataTransfer.files[0],
-        fileObject: URL.createObjectURL(event.dataTransfer.files[0]),
-        fileName: event.dataTransfer.files[0].name
-      })
-    }
+    this.setState({
+      file: event.dataTransfer.files[0],
+      fileObject: URL.createObjectURL(event.dataTransfer.files[0]),
+      fileName: event.dataTransfer.files[0].name
+    })
   }
 
   render() {
