@@ -52,7 +52,7 @@
 ![Omega Notes](https://github.com/heegupark/omega-notes/blob/master/omega-notes-001.gif)
 
 [iPhone 6/7/8 - Portrait]
-![Omega Notes](https://github.com/heegupark/omega-notes/blob/master/omega-notes-001.gif)
+![Omega Notes](https://github.com/heegupark/omega-notes/blob/master/omega-notes-002.gif)
 
 [iPhone 6/7/8 - Landscape]
-![Omega Notes](https://github.com/heegupark/omega-notes/blob/master/omega-notes-001.gif)
+![Omega Notes](https://github.com/heegupark/omega-notes/blob/master/omega-notes-003.gif)
