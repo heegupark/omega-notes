@@ -8,6 +8,7 @@
     - view the notes
     - view the image of a note
     - add a note
+    - search notes
     - attach an image to a note
     - update a note(signed-in users)
     - delete a note(signed-in users)
@@ -33,6 +34,7 @@
 4. User can sign up/sign in/sign out.
 5. User can update a note after signing in.
 6. User can delete a note after signing in.
+7. User can search notes
 
 ## Lessons Learned
 1. Various ways of dynamically displaying data using React virtual DOM functions
