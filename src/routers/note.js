@@ -87,7 +87,7 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
       } else {
         try {
           sharp(req.file.path)
-            .resize({ width: 250, height: 250 })
+            .resize({ width: 100 })
             .png()
             .toFile(`${folder}/thumbnail-${req.file.filename}`)
           return res.status(201).json({
@@ -102,7 +102,6 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
         // return res.status(200).json({ message: 'File uploaded successfully'});
       }
   });
-
 });
 
 router.patch('/api/notes/:id', auth, async (req, res) => {
