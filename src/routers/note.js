@@ -88,6 +88,7 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
         try {
           sharp(req.file.path)
             .resize({ width: 100 })
+            .withMetadata()
             .toFile(`${folder}/thumbnail-${req.file.filename}`)
           return res.status(201).json({
             message: 'File uploaded and resized successfully',
