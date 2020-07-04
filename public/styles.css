@@ -75,7 +75,7 @@ main {
 }
 
 .update-image {
-  width: 405px;
+  width: 100%;
 }
 
 .btn-custom {
@@ -87,7 +87,7 @@ main {
 }
 
 .note-edit-custom {
-  width: 90%;
+  width: 100%;
   color: black;
   background-color: white;
   padding: 5px;
@@ -103,9 +103,25 @@ main {
   top: 12px;
 }
 
+.username {
+  font-size: 16px;
+}
+
 .wide-animation{
   width: 200px;
   animation: wide 0.2s ease-in;
+}
+
+.spinner-location-custom {
+  z-index: 1;
+  top: 40%;
+  left: 48px;
+}
+
+.spinner-location-update-custom {
+  z-index: 1;
+  top: 40%;
+  left: 47%;
 }
 
 .search-icon {
@@ -136,7 +152,7 @@ main {
 
 .modal-content {
   background-color: rgba(255, 255, 255, 1);
-  margin: 15% auto;
+  margin: 5% auto;
   border: 1px solid rgba(53, 230, 221);
   width: 50%;
 }
@@ -178,6 +194,10 @@ main {
   .signin-box {
     right: 15%;
   }
+
+  .search-input-box {
+    left: 16%;
+  }
 }
 
 @media (max-width: 991.98px) {
@@ -186,9 +206,7 @@ main {
   }
 
   .search-input-box {
-    position: absolute;
     left: 10%;
-    top: 12px;
   }
 }
 
@@ -199,6 +217,10 @@ main {
 
   .search-input-box {
     left: 3%;
+  }
+
+  .username {
+    font-size: 14px;
   }
 
   .modal-content {
@@ -227,7 +249,7 @@ main {
   }
 
   .wide-animation{
-    width: 250px;
+    width: 200px;
   }
 
   .signin-box {
@@ -236,6 +258,10 @@ main {
 
   main {
     min-height: 75vh;
+  }
+
+  .username {
+    font-size: 12px;
   }
 
   .modal-content {

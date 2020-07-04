@@ -59,13 +59,17 @@ class NoteItem extends Component {
   }
 
   handleUpdateClick() {
-    const { _id, description, imgUrl, openModal } = this.props
-    openModal('updateNote', _id, description, imgUrl)
+    const { _id, description, imgUrl, openModal, isUploading } = this.props
+    if (!isUploading) {
+      openModal('updateNote', _id, description, imgUrl)
+    }
   }
 
   handleDeleteClick() {
-    const { openModal } = this.props
-    openModal('deleteNote', event.target.id)
+    const { openModal, isUploading } = this.props
+    if (!isUploading) {
+      openModal('deleteNote', event.target.id)
+    }
   }
 
   handleImageClick() {
@@ -100,7 +104,8 @@ class NoteItem extends Component {
       description,
       updatedAt,
       updateNote,
-      keyword } = this.props
+      keyword,
+      isUploading } = this.props
     const { isModalOpen, isImgLoaded } = this.state
     const {
       getTimeMsg,
@@ -113,7 +118,7 @@ class NoteItem extends Component {
       <div id={_id}>
         <hr></hr>
         <div className="row my-1">
-          <div className="add-image ml-4 text-center">
+          <div className="add-image ml-2 text-center">
           {imgUrl
               ? (
                 <>
@@ -135,7 +140,7 @@ class NoteItem extends Component {
               )
               : (
                 // <img alt="" className="img-fluid img-thumbnail rounded"></img>
-                <div className="ml-2 mt-2">No Image</div>
+                <div className="ml-2 mt-2"></div>
               )
           }
           </div>

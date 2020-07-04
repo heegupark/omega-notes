@@ -54,9 +54,10 @@ class Note extends Component {
     })
     if (newNote.description) {
       if(file) {
-        addImage(form)
+        addImage(form, newNote, 'add')
+      } else {
+        addNote(newNote)
       }
-      addNote(newNote)
     } else {
       showMessage('please write a note!', 1000)
     }
@@ -115,7 +116,8 @@ class Note extends Component {
         closeModal,
         isModalOpen,
         updateNote,
-        keyword } = this.props
+        keyword,
+        isUploading } = this.props
     const {
         handleNoteInputChange,
         handleAddClick,
@@ -131,24 +133,42 @@ class Note extends Component {
           <div className="col-sm mx-auto input-group">
             <div className="input-group-prepend">
               {fileObject
-                ? (
-                    <div className="add-image mx-auto my-auto">
-                      <img
-                        alt=""
-                        className="img-fluid img-thumbnail rounded"
-                        src={fileObject}
-                        onClick={handleUploadBtnClick} />
-                    </div>
+                  ? (
+                      <div className="add-image mx-auto my-auto">
+                        {isUploading
+                        ? (
+                          <>
+                            <img
+                              alt=""
+                              className="img-fluid img-thumbnail rounded cursor"
+                              src={fileObject}
+                              style={{opacity: '0.6'}}/>
+                            <div
+                              className="spinner-location-custom position-absolute spinner-border spinner-border-sm text-success"
+                              role="status">
+                              <span className="sr-only"></span>
+                            </div>
+                          </>
+                        )
+                        : (
+                          <img
+                          alt = ""
+                          className = "img-fluid img-thumbnail rounded"
+                          src = { fileObject }
+                          onClick = { handleUploadBtnClick } />
+                        )}
+                      </div>
+                    )
+                  : (
+                      <button
+                        className="btn btn-sm btn-outline-success input-text cursor"
+                        disabled={isUploading}
+                        onClick={handleUploadBtnClick}
+                        onDragOver={e => e.preventDefault()}
+                        onDrop={handleFileDropChange}>
+                        Add Image
+                      </button>
                   )
-                : (
-                    <button
-                      className="btn btn-sm btn-outline-success input-text cursor"
-                      onClick={handleUploadBtnClick}
-                      onDragOver={e => e.preventDefault()}
-                      onDrop={handleFileDropChange}>
-                      Add Image
-                    </button>
-                )
               }
               <input
                 hidden
@@ -163,15 +183,28 @@ class Note extends Component {
               className="form-control resize-none input-text"
               type="text"
               value={note}
+              disabled={isUploading}
               onChange={handleNoteInputChange}
               placeholder="what do you have today?"/>
             <div className="input-group-append">
-              <button
-                disabled={isModalOpen}
-                type="button"
-                className="btn btn-sm btn-outline-info input-text"
-                onClick={handleAddClick}>Add</button>
-              {fileObject || note
+              {isUploading
+              ? (
+                  <button
+                    disabled
+                    type="button"
+                    className="btn btn-sm btn-outline-info input-text">Write</button>
+              )
+              :(
+                  <button
+                    disabled={isModalOpen}
+                    type="button"
+                    className="btn btn-sm btn-outline-info input-text"
+                    onClick={handleAddClick}>Write</button>
+              )
+              }
+              {isUploading
+              ? ''
+              : fileObject || note
                 ? (
                     <button
                       disabled={isModalOpen}
@@ -185,7 +218,6 @@ class Note extends Component {
           </div>
         </div>
         <div
-          ref={element => { this.element = element; }}
           className={`row mx-auto ${fileObject ? 'note-item-box-add' :'note-item-box' }`}>
           <div className='col-sm mx-auto'>
             {notes.length > 0
@@ -203,7 +235,8 @@ class Note extends Component {
                   openModal={openModal}
                   closeModal={closeModal}
                   updateNote={updateNote}
-                  keyword={keyword} />;
+                  keyword={keyword}
+                  isUploading={isUploading} />;
               })
               : (
                 <>

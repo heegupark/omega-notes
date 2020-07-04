@@ -22,9 +22,10 @@ router.post('/api/users/signin', async (req, res) => {
   try {
     const user = await User.findByCredentials(req.body.email, req.body.password)
     const token = await user.generateAuthToken()
-    res.status(200).send({ user, token })
+    res.status(200).json({ user, token })
   } catch(e) {
-    res.status(400).send()
+    // res.status(400).json({ message: 'failed to verify user credential.'})
+    res.status(400).json(e)
   }
 })
 

@@ -18,6 +18,8 @@ class Modal extends Component {
     this.handleUpdateFileInputChange = this.handleUpdateFileInputChange.bind(this)
     this.handleUploadBtnClick = this.handleUploadBtnClick.bind(this)
     this.handleFileDropChange = this.handleFileDropChange.bind(this)
+    this.textarea = React.createRef()
+    this.uploader = React.createRef()
   }
 
   handleModalCancelClick() {
@@ -35,14 +37,20 @@ class Modal extends Component {
   handleUpdateNoteClick() {
     const { file, fileObject, fileName, description, imgUrl } = this.state
     const { user, selectedNoteId, addImage, updateNote, closeModal } = this.props
-    const changedImageName = fileName ? fileName.split(' ').join('') : fileName
+    const pathArr = imgUrl.split('/')
+    const altFilename = pathArr[pathArr.length-1]
+    const changedImageName = fileName ? `thumbnail-${fileName.split(' ').join('')}` : altFilename
     const form = new FormData();
+    const updatedNote = {
+      id: selectedNoteId,
+      description: description,
+      imgUrl: `notes/${user._id}/${changedImageName}`
+    }
     if (file) {
       form.append('image', file, changedImageName);
-      addImage(form)
-      updateNote(selectedNoteId, description, `notes/${user._id}/thumbnail-${changedImageName}`)
+      addImage(form, updatedNote, 'update')
     } else {
-      updateNote(selectedNoteId, description)
+      updateNote(updatedNote)
     }
     closeModal()
   }
@@ -65,7 +73,7 @@ class Modal extends Component {
   }
 
   handleUploadBtnClick() {
-    this.refs.uploader.click();
+    this.uploader.current.click();
   }
 
   handleFileDropChange() {
@@ -86,9 +94,11 @@ class Modal extends Component {
       handleUpdateInputChange,
       handleUpdateFileInputChange,
       handleUploadBtnClick,
-      handleFileDropChange } = this
+      handleFileDropChange,
+      uploader,
+      textarea } = this
     const { description, imgUrl, fileObject } = this.state
-    const { modalCategory } = this.props
+    const { modalCategory, isUploading } = this.props
     let titleElement = null;
     let msgElement = null;
     let btnElement = null;
@@ -100,11 +110,11 @@ class Modal extends Component {
           <div>
             <button
               type="button"
-              className="btn btn-sm btn-outline-dark mx-2 btn-custom"
+              className="btn btn-sm btn-outline-dark mx-2 btn-custom mb-1"
               onClick={handleModalSignoutClick}>Sign Out</button>
             <button
               type="button"
-              className="btn btn-sm btn-outline-secondary mx-2 btn-custom"
+              className="btn btn-sm btn-outline-secondary mx-2 btn-custom mb-1"
               onClick={handleModalCancelClick}>Close</button>
           </div>
         )
@@ -116,11 +126,11 @@ class Modal extends Component {
           <div>
               <button
                 type="button"
-                className="btn btn-sm btn-outline-danger mx-2 btn-custom"
+                className="btn btn-sm btn-outline-danger mx-2 btn-custom mb-1"
                 onClick={handleDeleteNoteClick}>Delete</button>
               <button
                 type="button"
-                className="btn btn-sm btn-outline-secondary mx-2 btn-custom"
+                className="btn btn-sm btn-outline-secondary mx-2 btn-custom mb-1"
                 onClick={handleModalCancelClick}>Close</button>
             </div>
           )
@@ -128,23 +138,39 @@ class Modal extends Component {
       case 'updateNote':
         titleElement = (<p className="h5 mt-3 text-white">update a note</p>)
         msgElement = (
-          <div className="row mx-auto input-group note-edit-custom">
-            <div className="input-group-prepend mx-auto">
+          <div className="row mx-auto note-edit-custom">
+            <div className="mx-auto">
               {imgUrl || fileObject
-                ? (
+                ? isUploading
+                  ? (
+                    <div className="mx-auto my-auto">
+                      <img
+                        alt=""
+                        className="w-100 img-fluid img-thumbnail rounded"
+                        src={fileObject || imgUrl}
+                        style={{ opacity: '0.6' }}/>
+                      <div
+                        style={{ display: isUploading ? 'block' : 'none' }}
+                        className="spinner-location-update-custom position-absolute spinner-border text-success"
+                        role="status">
+                        <span className="sr-only"></span>
+                      </div>
+                    </div>
+                  )
+                  :(
                   <div className="mx-auto my-auto">
                     <img
                       alt=""
-                      className="cursor img-fluid img-thumbnail rounded"
+                      className="w-100 cursor img-fluid img-thumbnail rounded"
                       src={fileObject || imgUrl}
                       onClick={handleUploadBtnClick}
                       onDragOver={e => e.preventDefault()}
                       onDrop={handleFileDropChange} />
-                    </div>
+                  </div>
                   )
                 : (
                   <button
-                    className="btn btn-sm btn-outline-success cursor update-image"
+                    className="w-100 btn btn-sm btn-outline-success cursor mb-1"
                     onClick={handleUploadBtnClick}
                     onDragOver={e => e.preventDefault()}
                     onDrop={handleFileDropChange}>
@@ -155,27 +181,34 @@ class Modal extends Component {
               <input
                 hidden
                 type="file"
-                ref="uploader"
+                ref={uploader}
                 onChange={handleUpdateFileInputChange} />
             </div>
             <textarea
               autoFocus
               required
               rows="3"
-              className="mt-1 form-control px-2 py-1 rounded resize-none w-100"
+              ref={textarea}
+              disabled={isUploading}
+              className="mx-auto mt-1 bg-white px-2 py-1 rounded resize-none w-100 border-light"
               value={description}
-              onChange={handleUpdateInputChange} />
+              onChange={handleUpdateInputChange}
+              onFocus={(e) => {
+                e.target.selectionStart = e.target.value.length;
+              }} />
           </div>
           )
         btnElement = (
           <div>
             <button
               type="button"
-              className="btn btn-sm btn-outline-warning mx-2 btn-custom"
+              disabled={isUploading}
+              className="btn btn-sm btn-outline-warning mx-2 btn-custom mb-1"
               onClick={handleUpdateNoteClick}>Update</button>
             <button
               type="button"
-              className="btn btn-sm btn-outline-secondary mx-2 btn-custom"
+              disabled={isUploading}
+              className="btn btn-sm btn-outline-secondary mx-2 btn-custom mb-1"
               onClick={handleModalCancelClick}>Close</button>
           </div>
         )
@@ -183,20 +216,18 @@ class Modal extends Component {
       case 'enlargeImage':
         titleElement = ('')
         msgElement = (
-          <div className="row mx-auto input-group note-edit-custom">
-            <div className="input-group-prepend mx-auto">
+          <div className="row mx-auto note-edit-custom">
+            <div className="mx-auto">
               <img
                 alt=""
-                className="cursor img-fluid img-thumbnail rounded"
+                className="img-fluid img-thumbnail rounded"
                 src={fileObject || imgUrl}
-                onClick={handleUploadBtnClick}
-                onDragOver={e => e.preventDefault()}
-                onDrop={handleFileDropChange} />
+                />
             </div>
             <textarea
               rows="3"
               disabled
-              className="mt-1 bg-white form-control px-2 py-1 rounded resize-none w-100"
+              className="mt-1 bg-white px-2 py-1 rounded resize-none w-100 border-light"
               value={description}/>
           </div>
         )

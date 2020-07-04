@@ -7,77 +7,64 @@ class Signup extends Component {
       name: '',
       email: '',
       password: '',
-      passwordconfirm: ''
+      passwordconfirm: '',
+      message: ''
     }
     this.handleCancelClick = this.handleCancelClick.bind(this)
     this.handleSigninClick = this.handleSigninClick.bind(this)
-    this.handleUsernameValueChange = this.handleUsernameValueChange.bind(this)
-    this.handleEmailValueChange = this.handleEmailValueChange.bind(this)
-    this.handlePasswordValueChange = this.handlePasswordValueChange.bind(this)
-    this.handlePasswordConfirmValueChange = this.handlePasswordConfirmValueChange.bind(this)
     this.handleSignupClick = this.handleSignupClick.bind(this)
+    this.handleInputchange = this.handleInputchange.bind(this)
+    this.handleBackToMain = this.handleBackToMain.bind(this)
     this.signup = this.signup.bind(this)
   }
 
   handleCancelClick() {
-    this.props.setPage('note')
-  }
-
-  handleSigninClick() {
-    this.props.setPage('signin')
-  }
-
-  handleUsernameValueChange(event) {
-    if (event.target.value.length < 2) {
-      event.target.value = event.target.value.trim();
-    }
-    this.setState({
-      name: event.target.value
-    })
-  }
-
-  handleEmailValueChange() {
-    if (event.target.value.length < 2) {
-      event.target.value = event.target.value.trim();
-    }
-    this.setState({
-      email: event.target.value
-    })
-  }
-
-  handlePasswordValueChange() {
-    if (event.target.value.length < 2) {
-      event.target.value = event.target.value.trim();
-    }
-    this.setState({
-      password: event.target.value
-    })
-  }
-
-  handlePasswordConfirmValueChange() {
-    if (event.target.value.length < 2) {
-      event.target.value = event.target.value.trim();
-    }
-    this.setState({
-      passwordconfirm: event.target.value
-    })
-  }
-
-  handleSignupClick() {
-    const { name, email, password } = this.state
-    const { signup } = this
-    const credential = {
-      name,
-      email,
-      password
-    }
-    signup(credential)
     this.setState({
       name: '',
       email: '',
       password: '',
       passwordconfirm: ''
     })
+  }
+
+  handleSigninClick() {
+    this.props.setPage('signin')
+  }
+
+  handleBackToMain() {
+    this.props.setPage('note')
+  }
+
+  handleInputchange() {
+    if (event.target.value.length < 2) {
+      event.target.value = event.target.value.trim();
+    }
+    this.setState({
+      [event.target.name]: event.target.value
+    })
+  }
+
+  handleSignupClick() {
+    const { name, email, password, passwordconfirm } = this.state
+    const { signup } = this
+    if (password !== passwordconfirm) {
+      this.setState({
+        message: 'Passwords don\'t match.'
+      })
+    } else {
+      const credential = {
+        name,
+        email,
+        password
+      }
+      signup(credential)
+      this.setState({
+        name: '',
+        email: '',
+        password: '',
+        passwordconfirm: ''
+      })
+    }
   }
 
   signup(credential) {
@@ -91,24 +78,29 @@ class Signup extends Component {
     })
       .then(res => res.json())
       .then(data => {
-        window.localStorage.setItem('omega-notes-token', data.token)
-        this.props.setPage('note', data.user)
-        this.props.setSignin()
+        if(data.token && data.user) {
+          window.localStorage.setItem('omega-notes-token', data.token)
+          this.props.setPage('note', data.user)
+          this.props.setSignin()
+        } else {
+          this.setState({
+            message: 'Sign-Up is not completed.'
+          })
+        }
       })
-      .catch(err => console.error(err.message));
+      .catch(err => {
+        console.error(`Something wrong happened while signing up:${err.message}`)
+      });
   }
 
   render() {
     const {
       handleCancelClick,
       handleSigninClick,
-      handleUsernameValueChange,
-      handleEmailValueChange,
-      handlePasswordValueChange,
-      handlePasswordConfirmValueChange,
-      handleSignupClick } = this
-    const { message } = this.props
-    const { signup } = this.state
+      handleSignupClick,
+      handleBackToMain,
+      handleInputchange } = this
+    const { name, email, password, passwordconfirm, message } = this.state
     return (
       <main>
         <div className="row mx-auto sign-item-box">
@@ -124,7 +116,9 @@ class Signup extends Component {
                 type="text"
                 className="form-control border-info"
                 placeholder="username"
-                onChange={handleUsernameValueChange}></input>
+                name="name"
+                value={name || ''}
+                onChange={handleInputchange}></input>
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -134,7 +128,9 @@ class Signup extends Component {
                 type="email"
                 className="form-control border-info"
                 placeholder="email"
-                onChange={handleEmailValueChange}></input>
+                name="email"
+                value={email || ''}
+                onChange={handleInputchange}></input>
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -144,7 +140,9 @@ class Signup extends Component {
                 type="password"
                 className="form-control border-info"
                 placeholder="password"
-                onChange={handlePasswordValueChange}></input>
+                name="password"
+                value={password || ''}
+                onChange={handleInputchange}></input>
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -154,7 +152,9 @@ class Signup extends Component {
                 type="password"
                 className="form-control border-info"
                 placeholder="password confirm"
-                onChange={handlePasswordConfirmValueChange}></input>
+                name="passwordconfirm"
+                value={passwordconfirm || ''}
+                onChange={handleInputchange}></input>
             </div>
             <div className="text-center my-1">
               <span className="text-danger">{message}</span>
@@ -172,6 +172,11 @@ class Signup extends Component {
               <button
                 className="btn btn-sm mx-1 text-info sign-up-btn"
                 onClick={handleSigninClick}>signin</button>
+            </div>
+            <div className="text-center my-3">
+              <button
+                className="btn btn-sm mx-1 text-secondary sign-up-btn"
+                onClick={handleBackToMain}>back to main</button>
             </div>
           </div>
         </div>

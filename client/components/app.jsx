@@ -14,14 +14,15 @@ class App extends Component {
       originalNotes: [],
       view: 'note',
       user: {},
+      imgUrl: '',
+      description: '',
+      modalCategory: '',
+      keyword: '',
+      selectedNoteId: null,
       isSignedIn: false,
       isModalOpen: false,
-      modalCategory: '',
-      selectedNoteId: null,
-      description: '',
-      imgUrl: '',
       isFirstSearch: true,
-      keyword: ''
+      isUploading: false
     };
     this.setPage = this.setPage.bind(this)
     this.getUserInfo = this.getUserInfo.bind(this)
@@ -87,19 +88,29 @@ class App extends Component {
       .catch(err => console.error(err.message));
   }
 
-  addImage(form) {
+  addImage(form, note, category) {
+    this.setState({
+      isUploading: true
+    })
     const _id = this.state.user._id ? this.state.user._id : 'guest'
     fetch(`/api/notes/image/${_id}`, {
       method: 'POST',
       body: form
-    })
-      .then(res => {
-        res.json();
-      })
+    }).then(res => res.json())
       .then(data => {
-        console.log("file is uploaded.")
+        console.log(`${data.message}:${data.filename}`)
+        if(category === 'add') {
+          this.addNote(note)
+        } else if(category === 'update') {
+          this.updateNote(note)
+        }
       })
-      .catch(error => console.error('image uploading error', error));
+      .catch(err => {
+        console.error('image uploading error', err.message)
+        this.setState({
+          isUploading: false
+        });
+      })
   }
 
   addNote(note) {
@@ -111,45 +122,55 @@ class App extends Component {
         "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(note)
-    })
-      .then(res => res.json())
+    }).then(res => res.json())
       .then(data => {
         this.setState({
-          notes: [data, ...this.state.notes]
+          notes: [data, ...this.state.notes],
+          isUploading: false
         });
       })
-      .catch(err => console.error(err.message));
+      .catch(err => {
+        console.error('adding a note error', err.message)
+        this.setState({
+          isUploading: false
+        });
+      })
   }
 
-  updateNote(noteId, description, imgUrl) {
+  updateNote(updatedNote) {
     const token = window.localStorage.getItem('omega-notes-token')
     const arr = [...this.state.notes]
     const newArr = arr.map((note) => {
-      if (note._id === noteId) {
-        note.description = description
-        note.imgUrl = imgUrl
+      if (note._id === updatedNote.id) {
+        note.description = updatedNote.description
+        note.imgUrl = updatedNote.imgUrl
       }
       return note
     })
     if (token) {
-      fetch(`/api/notes/${noteId}`, {
+      fetch(`/api/notes/${updatedNote.id}`, {
         method: 'PATCH',
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify({
-          description,
-          imgUrl
+          description: updatedNote.description,
+          imgUrl: updatedNote.imgUrl
         })
-      })
-        .then(res => res.json())
+      }).then(res => res.json())
         .then(data => {
           this.setState({
-            notes: newArr
+            notes: newArr,
+            isUploading: false
           })
         })
-        .catch(err => console.error(err.message));
+        .catch(err => {
+          console.error('updating a note error', err.message)
+          this.setState({
+            isUploading: false
+          });
+        })
     }
   }
 
@@ -277,7 +298,8 @@ class App extends Component {
       selectedNoteId,
       description,
       imgUrl,
-      keyword } = this.state
+      keyword,
+      isUploading } = this.state
     const username = user ? user.name : ''
     let element = null
 
@@ -292,7 +314,8 @@ class App extends Component {
             notes={notes}
             addNote={addNote}
             addImage={addImage}
-            keyword={keyword}/>
+            keyword={keyword}
+            isUploading={isUploading}/>
         )
         break;
       case 'signin':
@@ -300,6 +323,7 @@ class App extends Component {
           <Signin
             setPage={setPage}
             setSignin={setSignin}
+            isUploading={isUploading}
             />
         )
         break;
@@ -308,6 +332,7 @@ class App extends Component {
           <Signup
             setPage={setPage}
             setSignin={setSignin}
+            isUploading={isUploading}
           />
         )
         break;
@@ -322,7 +347,8 @@ class App extends Component {
           closeModal={closeModal}
           openModal={openModal}
           isModalOpen={isModalOpen}
-          searchKeyword={searchKeyword} />
+          searchKeyword={searchKeyword}
+          isUploading={isUploading} />
         {element}
         {isModalOpen
           ? <Modal
@@ -335,7 +361,8 @@ class App extends Component {
             selectedNoteId={selectedNoteId}
             closeModal={closeModal}
             description={description}
-            imgUrl={imgUrl} />
+            imgUrl={imgUrl}
+            isUploading={isUploading} />
           : ''
         }
         <Footer />

@@ -10,14 +10,15 @@ class Signin extends Component {
     }
     this.handleSignupClick = this.handleSignupClick.bind(this)
     this.handleCancelClick = this.handleCancelClick.bind(this)
-    this.handleEmailValueChange = this.handleEmailValueChange.bind(this)
-    this.handlePasswordValueChange = this.handlePasswordValueChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this)
     this.handleSigninClick = this.handleSigninClick.bind(this)
     this.signin = this.signin.bind(this)
+    this.handleBackToMain = this.handleBackToMain.bind(this)
+    this.inputEmail = React.createRef()
   }
 
   componentDidMount(){
-    this.inputEmail.focus()
+    this.inputEmail.current.focus()
   }
 
   handleSignupClick() {
@@ -25,12 +26,16 @@ class Signin extends Component {
   }
 
   handleCancelClick() {
-    this.props.setPage('note')
+    this.setState({
+      email: '',
+      password: '',
+      message: ''
+    })
   }
 
-  handleEmailValueChange() {
+  handleInputChange() {
     this.setState({
-      email: event.target.value
+      [event.target.name]: event.target.value
     })
   }
 
@@ -38,6 +43,10 @@ class Signin extends Component {
     this.setState({
       password: event.target.value
     })
+  }
+
+  handleBackToMain() {
+    this.props.setPage('note')
   }
 
   handleSigninClick() {
@@ -61,22 +70,21 @@ class Signin extends Component {
         "Connection": "keep-alive"
       },
       body: JSON.stringify(credential)
-    })
-      .then(res => res.json())
+    }).then(res => res.json())
       .then(data => {
-        this.setState({
-          message: 'Successfully signed in.'
-        })
-        window.localStorage.setItem('omega-notes-token', data.token)
-        this.props.setPage('note', data.user)
-        this.props.setSignin()
+        if(data.token && data.user) {
+          window.localStorage.setItem('omega-notes-token', data.token)
+          this.props.setPage('note', data.user)
+          this.props.setSignin()
+        } else {
+          this.setState({
+            message: 'Please check your email and password.'
+          })
+          this.inputEmail.current.focus()
+        }
       })
       .catch(err => {
-        this.setState({
-          message: 'Please check your email and password.'
-        })
-        this.inputEmail.focus()
-        console.error(err.message)
+        console.error(`Something wrong happened while signing in:${err.message}`)
       });
   }
 
@@ -84,9 +92,10 @@ class Signin extends Component {
     const {
       handleSignupClick,
       handleCancelClick,
-      handleEmailValueChange,
-      handlePasswordValueChange,
-      handleSigninClick } = this
+      handleInputChange,
+      handleSigninClick,
+      handleBackToMain,
+      inputEmail } = this
     const { email, password, message } = this.state
     return (
       <main>
@@ -98,13 +107,14 @@ class Signin extends Component {
                 <span className="input-group-text bg-info text-white">@</span>
               </div>
               <input
-                ref={(input) => { this.inputEmail = input }}
+                ref={inputEmail}
                 required
                 type="email"
                 className="form-control border-info"
                 placeholder="email"
-                value={email}
-                onChange={handleEmailValueChange}></input>
+                name="email"
+                value={email || ''}
+                onChange={handleInputChange}></input>
             </div>
             <div className="input-group mb-3">
               <div className="input-group-prepend">
@@ -115,8 +125,9 @@ class Signin extends Component {
                 type="password"
                 className="form-control border-info"
                 placeholder="password"
-                value={password}
-                onChange={handlePasswordValueChange}></input>
+                name="password"
+                value={password || ''}
+                onChange={handleInputChange}></input>
             </div>
             <div className="text-center my-1">
               <span className="text-danger">{message}</span>
@@ -134,6 +145,11 @@ class Signin extends Component {
               <button
                 className="btn btn-sm mx-1 text-info sign-up-btn"
                 onClick={handleSignupClick}>signup</button>
+            </div>
+            <div className="text-center my-3">
+              <button
+                className="btn btn-sm mx-1 text-secondary sign-up-btn"
+                onClick={handleBackToMain}>back to main</button>
             </div>
           </div>
         </div>

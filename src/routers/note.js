@@ -80,24 +80,27 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
     }
   }).single('image');
   upload(req, res, (error) => {
-      try {
-        sharp(req.file.path)
-          .resize({ width: 250, height: 250 })
-          .png()
-          .toFile(`${folder}/thumbnail-${req.file.filename}`)
-        return res.status(201).json({
-          message: 'File resized successfully'
-        });
-      } catch (error) {
-        console.error(error);
-      }
       if (error) {
-      return res.status(400).json({
-        error: 'Failed to upload an image'
-      });
-    } else {
-      return res.status(200).json({status: 'success'});
-    }
+        return res.status(400).json({
+          message: `Failed to upload an image:${error.message}`
+        });
+      } else {
+        try {
+          sharp(req.file.path)
+            .resize({ width: 250, height: 250 })
+            .png()
+            .toFile(`${folder}/thumbnail-${req.file.filename}`)
+          return res.status(201).json({
+            message: 'File uploaded and resized successfully',
+            filename: `thumbnail-${req.file.filename}`
+          });
+        } catch (error) {
+          return res.status(400).json({
+            message: `Failed to resize an image:${error.message}`
+          });
+        }
+        // return res.status(200).json({ message: 'File uploaded successfully'});
+      }
   });
 
 });

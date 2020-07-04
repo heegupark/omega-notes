@@ -64,12 +64,13 @@ class Header extends Component {
       data,
       username,
       isSignedIn,
-      isModalOpen } = this.props
+      isModalOpen,
+      isUploading } = this.props
     const { isSearch, search } = this.state
     return (
       <nav className="navbar bg-info fixed-top">
         <div className="input-group mb-3 search-input-box" style={{ display: view !== 'note' ? 'none' : ''}}>
-          {isSearch
+          {isSearch && !isUploading
             ?(
               <>
                 <input
@@ -77,44 +78,48 @@ class Header extends Component {
                   placeholder="search notes"
                   className="pl-2 search-input wide-animation"
                   value={search}
+                  style={{ zIndex: '1' }}
                   onChange={handleSearchInputChange}
                 />
-                <div className="input-group-append">
+                <div
+                  className="input-group-append"
+                  style={{ zIndex: '1' }}>
                   <button
                     className="btn btn-sm btn-secondary"
                     onClick={handleSearchCancelClick}>
                     X
                   </button>
                 </div>
-                </>
+              </>
             )
-            :(
-              <div className="search-icon text-white text-center cursor" onClick={handleSearchClick}>
-                <i className="fas fa-search"></i>
-              </div>
-            )
+            : (
+                <div
+                  disabled={!isUploading}
+                  className="search-icon text-white text-center cursor"
+                  onClick={handleSearchClick}>
+                  <i className="fas fa-search"></i>
+                </div>
+              )
           }
         </div>
         <div className="mx-auto">
           <div className="col my-auto text-center logo-box">
-            <a href="https://www.heegu.net" target="_blank" style={{ display: isSearch ? 'none' : '' }}>
-              <img className="omega-logo mr-1 mb-1" src="images/o-logo.png"/>
-            </a>
-            <a className="navbar-brand text-white mx-auto omega-note" onClick={handleLogoClick} style={{ display: isSearch ? 'none' : '' }}>omega notes</a>
+            <img className="omega-logo mr-1 mb-1" src="images/o-logo.png"/>
+            <div className="navbar-brand text-white mx-auto omega-note" onClick={handleLogoClick}>notes</div>
           </div>
         </div>
         <div className="signin-box" style={{ display: view !== 'note' ? 'none' : '' }}>
           <div className="text-center text-white mx-auto mt-1">
-            <span>{username || ''}</span>
+            <span className="username">{username || ''}</span>
             {isSignedIn
               ? <button
-                disabled={isModalOpen ? true: false}
+                disabled={isModalOpen || isUploading ? true: false}
                 className="mt-2 btn signin-btn text-dark"
                 onClick={handleSignoutClick}>
                   <i className="fas fa-sign-out-alt"></i>
               </button>
               : <button
-                disabled={isModalOpen ? true : false}
+                disabled={isModalOpen || isUploading ? true : false}
                 className="mt-2 btn signin-btn text-white"
                 onClick={handleLoginClick}>
                 <i className="fas fa-sign-in-alt"></i>
