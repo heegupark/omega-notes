@@ -15,6 +15,7 @@ class App extends Component {
       view: 'note',
       user: {},
       imgUrl: '',
+      thumbnailImgUrl: '',
       description: '',
       modalCategory: '',
       keyword: '',
@@ -144,6 +145,7 @@ class App extends Component {
       if (note._id === updatedNote.id) {
         note.description = updatedNote.description
         note.imgUrl = updatedNote.imgUrl
+        note.thumbnailImgUrl = updatedNote.thumbnailImgUrl
       }
       return note
     })
@@ -156,7 +158,8 @@ class App extends Component {
         },
         body: JSON.stringify({
           description: updatedNote.description,
-          imgUrl: updatedNote.imgUrl
+          imgUrl: updatedNote.imgUrl,
+          thumbnailImgUrl: updatedNote.thumbnailImgUrl
         })
       }).then(res => res.json())
         .then(data => {
@@ -164,6 +167,7 @@ class App extends Component {
             notes: newArr,
             isUploading: false
           })
+          this.closeModal()
         })
         .catch(err => {
           console.error('updating a note error', err.message)
@@ -298,6 +302,7 @@ class App extends Component {
       selectedNoteId,
       description,
       imgUrl,
+      thumbnailImgUrl,
       keyword,
       isUploading } = this.state
     const username = user ? user.name : ''
@@ -362,6 +367,7 @@ class App extends Component {
             closeModal={closeModal}
             description={description}
             imgUrl={imgUrl}
+            thumbnailImgUrl={thumbnailImgUrl}
             isUploading={isUploading} />
           : ''
         }

@@ -12,6 +12,11 @@ const noteSchema = new mongoose.Schema({
     required: false,
     trim: true
   },
+  thumbnailImgUrl: {
+    type: String,
+    required: false,
+    trim: true
+  },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     required: false,

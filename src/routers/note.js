@@ -73,8 +73,8 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
     },
     storage: storage,
     fileFilter(req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
-        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      if (!file.originalname.match(/\.(gif|GIF|jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+        return cb(new Error('Please upload a .jpg, .gif, .jpeg, or .png file'));
       }
       cb(undefined, true);
     }
@@ -107,7 +107,7 @@ router.post('/api/notes/image/:path', auth, (req, res) => {
 
 router.patch('/api/notes/:id', auth, async (req, res) => {
   const updates = Object.keys(req.body)
-  const allowedUpdates = ['description', 'imgUrl', 'completed']
+  const allowedUpdates = ['description', 'imgUrl', 'thumbnailImgUrl', 'completed']
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
   if (!isValidOperation) {

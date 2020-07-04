@@ -8,6 +8,7 @@ class Modal extends Component {
       imgUrl: this.props.imgUrl,
       file: null,
       fileObject: null,
+      previewFileObject: null,
       fileName: null
     }
     this.handleModalCancelClick = this.handleModalCancelClick.bind(this)
@@ -35,27 +36,30 @@ class Modal extends Component {
   }
 
   handleUpdateNoteClick() {
+    event.preventDefault()
     const { file, fileObject, fileName, description, imgUrl } = this.state
     const { user, selectedNoteId, addImage, updateNote, closeModal } = this.props
     const pathArr = imgUrl.split('/')
     const altFilename = pathArr[pathArr.length-1]
-    const changedImageName = fileName ? `thumbnail-${fileName.split(' ').join('')}` : altFilename
+    const changedImageName = fileName ? `${fileName.split(' ').join('')}` : altFilename
     const form = new FormData();
     const updatedNote = {
       id: selectedNoteId,
       description: description,
-      imgUrl: `notes/${user._id}/${changedImageName}`
+      imgUrl: `notes/${user._id}/${changedImageName}`,
+      thumbnailImgUrl: `notes/${user._id}/thumbnail-${changedImageName}`
     }
+    console.log(updatedNote.thumbnailImgUrl)
     if (file) {
       form.append('image', file, changedImageName);
       addImage(form, updatedNote, 'update')
     } else {
       updateNote(updatedNote)
     }
-    closeModal()
   }
 
   handleUpdateInputChange() {
+    event.preventDefault()
     if(event.target.value.length < 2) {
       event.target.value = event.target.value.trim()
     }
@@ -65,14 +69,17 @@ class Modal extends Component {
   }
 
   handleUpdateFileInputChange() {
+    event.preventDefault()
     this.setState({
       file: event.target.files[0],
       fileObject: URL.createObjectURL(event.target.files[0]),
+      previewFileObject: URL.createObjectURL(event.target.files[0]),
       fileName: event.target.files[0].name
     })
   }
 
   handleUploadBtnClick() {
+    event.preventDefault()
     this.uploader.current.click();
   }
 
@@ -81,6 +88,7 @@ class Modal extends Component {
     this.setState({
       file: event.dataTransfer.files[0],
       fileObject: URL.createObjectURL(event.dataTransfer.files[0]),
+      previewFileObject: URL.createObjectURL(event.target.files[0]),
       fileName: event.dataTransfer.files[0].name
     })
   }
@@ -97,7 +105,7 @@ class Modal extends Component {
       handleFileDropChange,
       uploader,
       textarea } = this
-    const { description, imgUrl, fileObject } = this.state
+    const { description, imgUrl, fileObject, previewFileObject } = this.state
     const { modalCategory, isUploading } = this.props
     let titleElement = null;
     let msgElement = null;
@@ -140,15 +148,14 @@ class Modal extends Component {
         msgElement = (
           <div className="row mx-auto note-edit-custom">
             <div className="mx-auto">
-              {imgUrl || fileObject
-                ? isUploading
-                  ? (
+              {isUploading
+                ? (
                     <div className="mx-auto my-auto">
                       <img
                         alt=""
                         className="w-100 img-fluid img-thumbnail rounded"
-                        src={fileObject || imgUrl}
-                        style={{ opacity: '0.6' }}/>
+                        src={previewFileObject || imgUrl}
+                        style={{ opacity: '0.6' }} />
                       <div
                         style={{ display: isUploading ? 'block' : 'none' }}
                         className="spinner-location-update-custom position-absolute spinner-border text-success"
@@ -157,18 +164,19 @@ class Modal extends Component {
                       </div>
                     </div>
                   )
-                  :(
-                  <div className="mx-auto my-auto">
-                    <img
-                      alt=""
-                      className="w-100 cursor img-fluid img-thumbnail rounded"
-                      src={fileObject || imgUrl}
-                      onClick={handleUploadBtnClick}
-                      onDragOver={e => e.preventDefault()}
-                      onDrop={handleFileDropChange} />
-                  </div>
+                : imgUrl || fileObject
+                  ? (
+                    <div className="mx-auto my-auto">
+                      <img
+                        alt=""
+                        className="w-100 cursor img-fluid img-thumbnail rounded"
+                        src={previewFileObject || imgUrl}
+                        onClick={handleUploadBtnClick}
+                        onDragOver={e => e.preventDefault()}
+                        onDrop={handleFileDropChange} />
+                    </div>
                   )
-                : (
+                  : (
                   <button
                     className="w-100 btn btn-sm btn-outline-success cursor mb-1"
                     onClick={handleUploadBtnClick}

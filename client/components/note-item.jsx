@@ -100,6 +100,7 @@ class NoteItem extends Component {
     const {
       _id,
       imgUrl,
+      thumbnailImgUrl,
       isSignedIn,
       description,
       updatedAt,
@@ -125,7 +126,7 @@ class NoteItem extends Component {
                   <img
                     alt=""
                     className="img-fluid img-thumbnail rounded cursor"
-                    src={imgUrl}
+                    src={thumbnailImgUrl}
                     onLoad={() => this.setState({ isImgLoaded: true })}
                     style={isImgLoaded ? {} : { display: 'none' }}
                     onClick={handleImageClick}></img>
