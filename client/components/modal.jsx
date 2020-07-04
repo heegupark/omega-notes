@@ -19,8 +19,10 @@ class Modal extends Component {
     this.handleUpdateFileInputChange = this.handleUpdateFileInputChange.bind(this)
     this.handleUploadBtnClick = this.handleUploadBtnClick.bind(this)
     this.handleFileDropChange = this.handleFileDropChange.bind(this)
+    this.handleOutsideClick = this.handleOutsideClick.bind(this)
     this.textarea = React.createRef()
     this.uploader = React.createRef()
+    this.modal = React.createRef()
   }
 
   handleModalCancelClick() {
@@ -88,9 +90,16 @@ class Modal extends Component {
     this.setState({
       file: event.dataTransfer.files[0],
       fileObject: URL.createObjectURL(event.dataTransfer.files[0]),
-      previewFileObject: URL.createObjectURL(event.target.files[0]),
+      previewFileObject: URL.createObjectURL(event.dataTransfer.files[0]),
       fileName: event.dataTransfer.files[0].name
     })
+  }
+
+  handleOutsideClick(event) {
+    if (this.modal.current.contains(event.target)) {
+      return;
+    }
+    this.handleModalCancelClick();
   }
 
   render() {
@@ -103,8 +112,10 @@ class Modal extends Component {
       handleUpdateFileInputChange,
       handleUploadBtnClick,
       handleFileDropChange,
+      handleOutsideClick,
       uploader,
-      textarea } = this
+      textarea,
+      modal } = this
     const { description, imgUrl, fileObject, previewFileObject } = this.state
     const { modalCategory, isUploading } = this.props
     let titleElement = null;
@@ -250,8 +261,8 @@ class Modal extends Component {
         break;
     }
     return (
-      <div className="modal fade-in">
-        <div className="modal-content">
+      <div className="modal fade-in" onClick={handleOutsideClick}>
+        <div ref={modal} className="modal-content">
           <div className="text-center bg-info">
             {titleElement}
           </div>

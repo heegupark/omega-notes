@@ -110,8 +110,8 @@ class Note extends Component {
     this.setState({
       file: event.dataTransfer.files[0],
       fileObject: URL.createObjectURL(event.dataTransfer.files[0]),
-      fileName: event.dataTransfer.files[0].name,
-      previewFileObject: URL.createObjectURL(event.target.files[0])
+      previewFileObject: URL.createObjectURL(event.dataTransfer.files[0]),
+      fileName: event.dataTransfer.files[0].name
     })
   }
 
