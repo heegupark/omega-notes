@@ -38,9 +38,12 @@ class Header extends Component {
   }
 
   handleSearchClick() {
-    this.setState({
-      isSearch: true
-    })
+    const {isModalOpen, isUploading} = this.props
+    if(!isModalOpen && !isUploading) {
+      this.setState({
+        isSearch: true
+      })
+    }
   }
 
   handleSearchCancelClick() {
