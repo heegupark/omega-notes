@@ -70,7 +70,7 @@ class Header extends Component {
     return (
       <nav className="navbar bg-info fixed-top">
         <div className="input-group mb-3 search-input-box" style={{ display: view !== 'note' ? 'none' : ''}}>
-          {isSearch && !isUploading
+          {isSearch && !isUploading && !isModalOpen
             ?(
               <>
                 <input
