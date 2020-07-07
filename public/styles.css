@@ -152,7 +152,7 @@ main {
 
 .modal-content {
   background-color: rgba(255, 255, 255, 1);
-  margin: 5% auto;
+  margin: 6% auto;
   border: 1px solid rgba(53, 230, 221);
   width: 50%;
 }
@@ -225,7 +225,7 @@ main {
 
   .modal-content {
     width: 60%;
-    margin: 5% auto;
+    margin: 8% auto;
   }
 }
 
@@ -266,7 +266,7 @@ main {
 
   .modal-content {
     width: 90%;
-    margin: 10% auto;
+    margin: 13% auto;
   }
 }
 

@@ -5,6 +5,7 @@ import Note from './note'
 import Signin from './signin'
 import Signup from './signup'
 import Modal from './modal';
+import Disclaimer from './disclaimer';
 
 class App extends Component {
   constructor(props) {
@@ -23,7 +24,8 @@ class App extends Component {
       isSignedIn: false,
       isModalOpen: false,
       isFirstSearch: true,
-      isUploading: false
+      isUploading: false,
+      isDisclaimerAccepted: localStorage.getItem('omeganotesaccept')
     };
     this.setPage = this.setPage.bind(this)
     this.getUserInfo = this.getUserInfo.bind(this)
@@ -38,11 +40,18 @@ class App extends Component {
     this.addImage = this.addImage.bind(this)
     this.updateNote = this.updateNote.bind(this)
     this.searchKeyword = this.searchKeyword.bind(this)
+    this.handleDisclaimerAccept = this.handleDisclaimerAccept.bind(this)
   }
 
   componentDidMount() {
     this.getUserInfo()
     this.getNotes()
+  }
+
+  handleDisclaimerAccept(accept) {
+    this.setState({
+      isDisclaimerAccepted: accept
+    });
   }
 
   setPage(page, user) {
@@ -291,7 +300,8 @@ class App extends Component {
       setSignin,
       deleteNote,
       updateNote,
-      searchKeyword } = this
+      searchKeyword,
+      handleDisclaimerAccept } = this
     const {
       notes,
       view,
@@ -304,7 +314,8 @@ class App extends Component {
       imgUrl,
       thumbnailImgUrl,
       keyword,
-      isUploading } = this.state
+      isUploading,
+      isDisclaimerAccepted } = this.state
     const username = user ? user.name : ''
     let element = null
 
@@ -355,6 +366,13 @@ class App extends Component {
           searchKeyword={searchKeyword}
           isUploading={isUploading} />
         {element}
+        {isDisclaimerAccepted
+          ? ''
+          : (
+            <Disclaimer
+              handleDisclaimerAccept={handleDisclaimerAccept} />
+          )
+        }
         {isModalOpen
           ? <Modal
             user={user}
