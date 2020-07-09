@@ -9,7 +9,8 @@ class Note extends Component {
       file: null,
       fileObject: null,
       fileName: null,
-      previewFileObject: null
+      previewFileObject: null,
+      notePlaceHolder: 'what do you have today?'
     }
     this.handleNoteInputChange = this.handleNoteInputChange.bind(this)
     this.handleAddClick = this.handleAddClick.bind(this)
@@ -70,11 +71,11 @@ class Note extends Component {
   showMessage(message, time) {
     setTimeout(() => {
       this.setState({
-        note: ''
+        notePlaceHolder: 'what do you have today?'
       })
     }, time)
     this.setState({
-      note: message
+      notePlaceHolder: message
     })
   }
 
@@ -134,7 +135,7 @@ class Note extends Component {
         handleCancelClick,
         handleFileDropChange,
         uploader} = this
-    const { note, fileObject, previewFileObject } = this.state
+    const { note, fileObject, previewFileObject, notePlaceHolder } = this.state
     return (
       <main>
         <div className="row my-3 mx-auto fixed-top bg-white input-box">
@@ -183,7 +184,6 @@ class Note extends Component {
                 onChange={handleFileInputChange} />
             </div>
             <textarea
-              autoFocus
               required
               rows="1"
               className="form-control resize-none input-text"
@@ -191,7 +191,7 @@ class Note extends Component {
               value={note}
               disabled={isUploading}
               onChange={handleNoteInputChange}
-              placeholder={isUploading? "writing..." :"what do you have today?"}/>
+              placeholder={isUploading? "writing..." : notePlaceHolder}/>
             <div className="input-group-append">
               {isUploading
               ? (
