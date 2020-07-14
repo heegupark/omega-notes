@@ -22,12 +22,7 @@ router.post('/api/notes', auth, async (req, res) => {
 })
 
 router.get('/api/notes', auth, async (req, res) => {
-  const match = {}
   const sort = {}
-  if (req.query.completed) {
-    match.completed = req.query.completed === 'true'
-    match.owner = null
-  }
   if (req.query.sortBy) {
     const parts = req.query.sortBy.split(':')
     sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
