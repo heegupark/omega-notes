@@ -4,14 +4,14 @@
 
 
 ## Functionality Overview
-1. A client receive the data and display the data in HTML format
-    - view the notes
-    - view the image of a note
-    - add a note
-    - search notes
-    - attach an image to a note
-    - update a note(signed-in users)
-    - delete a note(signed-in users)
+1. A client receive the data from a server and dynamically display the data in HTML format
+    - to view the notes
+    - to view the image of a note
+    - to add a note
+    - to search notes
+    - to attach an image to a note
+    - to update a note(signed-in users)
+    - to delete a note(signed-in users)
     - sign up/sign in/sign out
 2. A server can process the data 
     - to view all notes
@@ -34,7 +34,7 @@
 4. User can sign up/sign in/sign out.
 5. User can update a note after signing in.
 6. User can delete a note after signing in.
-7. User can search notes
+7. User can search notes.
 
 ## Lessons Learned
 1. Various ways of dynamically displaying data using React virtual DOM functions
@@ -43,7 +43,7 @@
 4. React and JavaScript Object Oriented Programming for better functionalities and to increase the re-usage of codes
 5. Experienced to create API server using node.js to process the data with communicating with database and pass the data to client
 6. Experienced to create MongoDB database to store and retrieve data upon the request of a client via API server
-7. Experienced to upload a file using multer npm module
+7. Experienced to upload a file using multer node module
 8. Experienced to deploy the web and API server into AWS EC2 and create MongoDB database instance into MongoDB cloud
 
 ## Live Site
